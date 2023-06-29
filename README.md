@@ -1,4 +1,5 @@
-The CustomEncoder is a Python class that provides a scikit-learn-compatible implementation of a custom encoder for categorical variables. This encoder can be used within scikit-learn pipelines for preprocessing data, particularly when dealing with categorical features that require mapping to numerical values.
+## CustomEncoder: A Custom Encoding Transformer
+The **CustomEncoder** is a Python class that provides a scikit-learn-compatible implementation of a custom encoder for categorical variables. This encoder can be used within scikit-learn pipelines for preprocessing data, particularly when dealing with categorical features that require mapping to numerical values.
 
 **Features**
 - Implements the BaseEstimator and TransformerMixin classes from scikit-learn for compatibility with scikit-learn pipelines.
@@ -48,3 +49,39 @@ Here's an explanation of each part of the code:
    - Finally, it returns the transformed data `X_encoded`.
 
 In summary, this code defines a custom encoder that can learn and apply an encoding mapping to a specific column in input data. The `fit` method learns the encoding mapping, and the `transform` method applies it to the data. This encoder can be used as part of a scikit-learn pipeline for preprocessing data.
+
+### Usage Example
+
+```python
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler
+
+# Sample dataframe
+data = pd.DataFrame({
+    'color': ['red', 'green', 'blue', 'green', 'blue'],
+    'size': [10, 15, 12, 14, 11],
+    'weight': [200, 150, 180, 170, 160],
+    'label': [1, 0, 1, 0, 1]
+})
+
+# CustomEncoder class definition
+class CustomEncoder(BaseEstimator, TransformerMixin):
+    # constructor and methods go here
+
+# Define the pipeline
+pipeline = Pipeline([
+    ('encoder', ColumnTransformer([
+        ('custom_encoder', CustomEncoder('color'), ['color']),
+        ('scaler', StandardScaler(), ['size', 'weight'])
+    ], remainder='passthrough'))
+])
+
+# Fit and transform the data
+transformed_data = pipeline.fit_transform(data)
+
+# Print the transformed data
+print(transformed_data)
+```
+
